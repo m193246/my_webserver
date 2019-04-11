@@ -1,0 +1,101 @@
+p {
+  font-family: Arial;
+}
+
+h1 {
+  color: maroon;
+}
+
+h2 {
+  font-family: cursive;
+}
+
+div {
+    background-color: lightblue;
+}
+
+ul {
+    background-color: red;
+}
+
+body {
+    background-color: gold;
+}
+
+h5 {
+  color: purple !important;
+}
+
+p {
+  font-family: Georgia;
+}
+
+title {
+  color: teal;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.cursive {
+  font-family: cursive;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.description h5 {
+  color: teal;
+}p {
+  font-family: Arial;
+}
+
+h1 {
+  color: maroon;
+}
+
+h2 {
+  font-family: cursive;
+}
+
+div {
+    background-color: lightblue;
+}
+
+ul {
+    background-color: red;
+}
+
+body {
+    background-color: gold;
+}
+
+h5 {
+  color: purple !important;
+}
+
+p {
+  font-family: Georgia;
+}
+
+title {
+  color: teal;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.cursive {
+  font-family: cursive;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.description h5 {
+  color: teal;
+}

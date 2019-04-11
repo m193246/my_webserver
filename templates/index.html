@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="static/own.css" type="text/css" rel="stylesheet">
+    <link href="static/bootstrap.css" type="text/css" rel="stylesheet">
+  </head>
+
+  <div >
+    
+    <h1 class="h5">Hello, world!</h1>
+    <p><a class="text-primary">Welcome to my web server! Not sure what else
+       to put here put feel free to explore this barebones webpage.</a>
+
+    <br>
+    <img src="http://cdn.akc.org/content/hero/ham_hero.jpg" /><br></p>
+    <hr class="my-4">
+    <p class = "h2">Below you will see two buttons that allow you to turn on and
+        off the light on an Arduino UNO board, try it! <br></p>
+    <p class="lead">
+      <a class="btn btn-primary btn-lg" href="https://www.youtube.com/watch?v=oHg5SJYRHA0" role="button">Learn more about EW432 here</a>
+    </p>
+	<p class = "h1">
+		The temperature is {{t}} C and the humidity is {{h}} % <br>
+	</p>
+      <p class = "title cursive capitalize">
+          The temperature in Baltimore is {{temp1}} degrees <br>
+      </p>
+	<form action="/turn_on">
+	  Click here to turn on Arduino light:<br>
+	  <input type="submit" value="LED ON"><br>
+	</form> 
+	
+	 <form action="/turn_off">
+          Click here to turn off Arduino light:<br>
+          <input type="submit" value="LED OFF"><br>
+        </form>
+
+      <form action="/sensor_on">
+          Click here to turn on the board-mounted LED:<br>
+          <input type="submit" value="LIGHT"><br>
+        </form>
+
+      <form action="/sensor_off">
+          Click here to turn off the board-mounted LED:<br>
+          <input type="submit" value="DARKNESS"><br>
+        </form>
+
+      <form action="/message" method="post">
+          Name:<br>
+          <input type="text" name="message">
+          <br>
+          <br>
+          <input type="submit" value="Submit">
+        </form>
+    	
+  </div>
+</html>
