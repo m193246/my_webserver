@@ -10,7 +10,7 @@ s = serial.Serial("COM7")
 def get_name():
 
     #print("Enter a Marvel hero: ")
-    names = ["Captain America", "Thor", "Thanos", "Iron Man", "Deadpool", "Hulk", "Wolverine", "Ant-man"]
+    names = ["Thor", "Thanos", "Iron Man", "Deadpool", "Hulk", "Wolverine", "Ant-man"]
     super_hero_name = random.choice(names)
 
     public = "838d93462406b46abc48001411d6d1ae"
