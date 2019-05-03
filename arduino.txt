@@ -1,0 +1,74 @@
+#include <LiquidCrystal.h>
+
+const int buttonPin = 8;     // the number of the pushbutton pin
+const int ledPin =  10;      // the number of the LED pin
+const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+
+int buttonState = 0;         // variable for reading the pushbutton status
+
+void read_lcd_message();
+char get_serial_char();
+
+
+void setup() {
+  // initialize the LED pin as an output:
+  pinMode(ledPin, OUTPUT);
+  // initialize the pushbutton pin as an input:
+  pinMode(buttonPin, INPUT);
+  lcd.begin(16, 2);
+  Serial.begin(9600);
+  delay(500);
+}
+
+void loop() {
+  // read the state of the pushbutton value:
+  buttonState = digitalRead(buttonPin);
+
+  // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
+
+  if (buttonState == HIGH) {
+    // turn LED on:
+    digitalWrite(ledPin, HIGH);
+    delay(500);
+    digitalWrite(ledPin, LOW);
+    Serial.print('A');
+    //delay(200);
+    read_lcd_message();
+
+  }
+}
+
+void read_lcd_message() {
+  char c;
+  int i = 0;
+  lcd.clear();
+  //get chars from serial until we see '\n'
+  while(1){
+    c = get_serial_char();
+    if(c=='\n'){
+
+      break;
+    }
+    i++;
+
+//    if(i>16){
+//      //lcd.clear();
+//      //lcd.print("ERROR: too long");
+//      lcd.setCursor(0,1);
+//      break;
+//      //lcd.setCursor(0,1);
+//    }
+    //if(i>32){
+
+    //}
+    lcd.write(c);
+  }
+}
+
+char get_serial_char(){
+  char cmd;
+  while(Serial.available()==0);
+  cmd = Serial.read();
+  return cmd;
+}
