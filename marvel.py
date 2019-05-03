@@ -2,6 +2,11 @@ import requests
 import datetime
 import hashlib
 
+
+
+
+
+
 #print("Testing API")
 print("Enter a Marvel hero: ")
 super_hero_name = input()
@@ -15,8 +20,8 @@ ts = datetime.datetime.now().timestamp()
 input = str(ts)+private+public
 hash = hashlib.md5(input.encode('ascii')).hexdigest()
 
-query = "https://gateway.marvel.com:443/v1/public/creators?"
-query += "firstName=%s" % super_hero_name
+query = "https://gateway.marvel.com:443/v1/public/characters?"
+query += "name=%s" % super_hero_name
 query += "&apikey=%s" % public
 query += "&hash=%s" % hash
 query += "&ts=%s" % ts
@@ -26,11 +31,14 @@ print("public: %s, ts: %s, hash: %s" % (public, ts, hash))
 resp = requests.get(query)
 print("Super Hero description: ")
 vals = resp.json()
-
-try:
-    print(vals["data"]["results"][0])#["description"])
-except IndexError:
-    print("Sorry %s is not a real hero" % super_hero_name)
+#data = vals["data"]
+#results = data["results"]
+#desc = results["description"]
+#print(desc)
+#try:
+print(vals["data"]["results"][0]["comics"]["available"])
+#except IndexError:
+ #   print("Sorry %s is not a real hero" % super_hero_name)
 
 
 #import pdb

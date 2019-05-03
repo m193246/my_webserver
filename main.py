@@ -12,13 +12,11 @@ s = serial.Serial("COM7")     #"/dev/ttyACM0")
 
 @app.route("/")
 def hello():
-    s.write('A'.encode("ascii"))
-    msg = s.readline().decode("ascii")
-    #print("I got: ", msg)
-    msg = msg.split(',')
-    h = msg[0]
-    t = msg[1]
 
+    h, t = get_serial_data()
+    light = get_light_data()
+    print(h)
+    print(t)
     resp = requests.get(
         'https://api.openweathermap.org/data/2.5/weather?q=Baltimore&APPID=59d6f344ba349fa2eff07bd7b6571d6a')
     values = resp.json()
@@ -27,17 +25,25 @@ def hello():
     temp = weather['temp']
     temp1 = int((temp-273.15)*(9/5)+32)
 
-    return render_template("index.html", h=h, t=t,  temp1=temp1)
+    hum = weather['humidity']
 
-@app.route("/turn_on")
+    return render_template("index.html", h=h, t=t, temp1=temp1, hum=hum, light=light)
+
+def get_serial_data():
+        s.write('A'.encode("ascii"))
+        msg = s.readline().decode("ascii")
+        msg = msg.split(',')
+        h = msg[0]
+        t = msg[1]
+        return h, t
+
+
+
+
+@app.route("/turn_on", methods=["POST"])
 def button1():
-    s.write('B'.encode("ascii"))
-    s.write('A'.encode("ascii"))
-    msg1 = s.readline().decode("ascii")
-    msg1 = msg1.split(',')
-    h = msg1[0]
-    t = msg1[1]
-
+    s.write('C'.encode("ascii"))
+    h, t = get_serial_data()
     resp = requests.get(
         'https://api.openweathermap.org/data/2.5/weather?q=Baltimore&APPID=59d6f344ba349fa2eff07bd7b6571d6a')
     values = resp.json()
@@ -48,27 +54,22 @@ def button1():
 
     return render_template("index.html", h=h, t=t, temp1=temp1)
 
-@app.route("/turn_off")
+@app.route("/turn_off", methods=["POST"])
 def button2():
-    s.write('C'.encode("ascii"))
-    s.write('A'.encode("ascii"))
-    msg2 = s.readline().decode("ascii")
-    msg2 = msg2.split(',')
-    h = msg2[0]
-    t = msg2[1]
-
-    resp = requests.get('https://api.openweathermap.org/data/2.5/weather?q=Baltimore&APPID=59d6f344ba349fa2eff07bd7b6571d6a')
-    values = resp.json()
-
-    weather = values['main']
-    temp = weather['temp']
-    temp1 = int((temp - 273.15) * (9 / 5) + 32)
-
-    return render_template("index.html", h=h, t=t, temp1=temp1)
-
-@app.route("/sensor_on")
-def button3():
     s.write('D'.encode("ascii"))
+    h, t = get_serial_data()
+    resp = requests.get('https://api.openweathermap.org/data/2.5/weather?q=Baltimore&APPID=59d6f344ba349fa2eff07bd7b6571d6a')
+    values = resp.json()
+
+    weather = values['main']
+    temp = weather['temp']
+    temp1 = int((temp - 273.15) * (9 / 5) + 32)
+
+    return render_template("index.html", h=h, t=t, temp1=temp1)
+
+@app.route("/sensor_on", methods=["POST"])
+def button3():
+    s.write('E'.encode("ascii"))
     s.write('A'.encode("ascii"))
     msg2 = s.readline().decode("ascii")
     msg2 = msg2.split(',')
@@ -84,9 +85,9 @@ def button3():
 
     return render_template("index.html", h=h, t=t, temp1=temp1)
 
-@app.route("/sensor_off")
+@app.route("/sensor_off", methods=["POST"])
 def button4():
-    s.write('E'.encode("ascii"))
+    s.write('F'.encode("ascii"))
     s.write('A'.encode("ascii"))
     msg2 = s.readline().decode("ascii")
     msg2 = msg2.split(',')
@@ -105,17 +106,54 @@ def button4():
 
 @app.route("/data.json", methods=["GET"])
 def json_data():
-    data = {"temp": 65, "humidity": 25}
+
+    h, t = get_serial_data()
+
+    data = {"temp": t, "humidity": h}
 
     return jsonify(data)
+
+@app.route("/light.data", methods=["GET"])
+def light_data():
+
+    light = get_light_data()
+
+    data1 = {"light": light}
+
+    return jsonify(data1)
+
+def get_light_data():
+    s.write('G'.encode("ascii"))
+    msg = s.readline().decode("ascii")
+
+    return msg
 
 
 @app.route("/message", methods=["POST"])
 def message():
     message = request.form['message']
+
     cmd = "B%s\n" % message
     s.write(cmd.encode("ascii"))
 
     return render_template("index.html")
 
-app.run(host="0.0.0.0", port=8080, debug=True, use_reloader=False)
+@app.route("/error", methods=["POST"])
+def error():
+    error = request.form['error']
+    print(error)
+    cmd = "H%s\n" % error
+    s.write(cmd.encode("ascii"))
+
+    return render_template("index.html")
+
+#def get_remote_data():
+
+ #   info = request.get("http://localhost:5001/data.json")
+ #   values = info.json()
+ #   temp = values['temp']
+ #   hum = values['humidity']
+
+ #   return temp, hum
+
+app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)
